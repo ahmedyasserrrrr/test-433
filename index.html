@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمة تصميم وإنشاء بطاقات تهنئة شهر رمضان والعيد (كل عام أنتم بخير)</title>
+    <link id="favicon" rel="shortcut icon" href="./images/1626271846.png" type="image/png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Changa:wght@200..800&display=swap');
+        body {
+            font-family: "Changa", sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .image-container img {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.3s;
+        }
+        .image-container img:hover {
+            transform: scale(1.1);
+        }
+        #canvasContainer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #myCanvas {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+        .btn-custom {
+            width: 150px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-4">
+    <header class="text-center space-padding py-5">
+        <img class="img-fluid logo" src="image/لوجو كيان.png" width="80%" height="80%" alt="Cart header" />
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h4 class="py-4 position-relative lh-1">صمم بطاقة المعايدة الخاصة بك في أقل من دقيقة</h4>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </header>
+</div>
+
+<div class="container">
+    <div class="row py-5">
+        <div class="col-md-10 text-center m-auto">
+            <img src="image/cart-s1.png" width="100" class="image-filter" alt="">
+        </div>
+    </div>
+    <h3>اختر قالب البطاقة</h3>
+</div>
+
+<div class="container">
+    <div class="row py-3">
+        <div class="col-md-6">
+            <div class="meal p-3 image-container">
+                <img src="image/كيان-1.jpg" height="250px" width="80%" style="border-radius: 10%;" alt="صورة 1" onclick="selectMainImage(this)">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="meal p-3 image-container">
+                <img src="image/كيان-2 (1).jpg" height="250px" width="80%" style="border-radius: 10%;" alt="صورة 2" onclick="selectMainImage(this)">
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center text-md-center mb-4 mt-5">
+        <a rel="noopener noreferrer" class="m-auto text-center text-decoration-none text-dark">
+            <img class="img-fluid mb-3 p-3" src="https://btaqaat.com/image/cart-s2.png" alt="step-04">
+            <h4>اكتب اسمك</h4>
+        </a>
+    </div>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 mb-5">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control m-auto justify-content-center align-items-center text-center" placeholder="مثال: محبكم/ محمد عبدالله" aria-label="Username" oninput="addName()" id="inputName" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div id="canvasContainer">
+                <canvas id="myCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container d-flex justify-content-center  p-5 ">
+    <a id="canvasbtn" onclick="downloadImage()" class="btn btn-success mb-3 btn-lg btn-sm btn-block btn-custom" style="color:white;">اضغط لتحميل البطاقة</a>
+</div>
+<div class="container">
+    <hr>
+</div>
+
+<script>
+  var canvas = document.getElementById('myCanvas');
+  var ctx = canvas.getContext('2d');
+  var mainImage = new Image();
+  var extraImage = new Image();
+  var enteredName = '';
+
+  canvas.width = 1000;
+  canvas.height = 1000;
+
+  function selectMainImage(element) {
+      mainImage.src = element.src;
+      mainImage.onload = function() {
+          updateCanvas();
+      };
+  }
+
+  function selectPhrase(element) {
+      extraImage.src = element.src;
+      extraImage.onload = function() {
+          updateCanvas();
+      };
+  }
+
+  function addName() {
+      enteredName = document.getElementById('inputName').value;
+      updateCanvas();
+  }
+
+  function updateCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (mainImage.src) {
+          ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
+      }
+
+      if (extraImage.src) {
+          var sideMargin = 100;
+          var imageSize = 260;
+          var x = canvas.width - imageSize - sideMargin - 80;
+          var y = canvas.height - imageSize - sideMargin - 160;
+          ctx.drawImage(extraImage, x, y, imageSize, imageSize);
+      }
+
+      ctx.font = '60px "changa", semi-serif';
+      ctx.fillStyle = '#2c3e56';
+      ctx.textAlign = 'center';
+
+      if (enteredName) {
+          var textX = canvas.width / 2;
+          var textY = canvas.height - 140;
+          ctx.fillText(enteredName, textX, textY);
+      }
+  }
+
+  function downloadImage() {
+      var link = document.createElement('a');
+      link.download = 'my-image.png';
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+  }
+</script>
+
+<p class="text-center m-auto fs-3 "  style="font-size: 25px; color: #2c3e56; " >
+
+  تصميم وتطوير 
+
+ </p>
+
+<div class="container">
+  <div class="row">
+   
+      <div class="col-md-12 text-center p-2 ">
+        <a href="https://aysarhosting.com">
+          <img src="image/WhatsApp Image 2024-06-14 at 8.23.00 PM.jpeg" class="img-fluid p-3" width="180px" alt="">
+        </a>
+      </div>
+
+  </div>
+</div>
+
+</body>
+</html>

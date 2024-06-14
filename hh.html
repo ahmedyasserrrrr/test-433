@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة صورة واسم إلى الصورة باستخدام canvas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <style>
+    
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            cursor: pointer;
+            margin: 10px;
+            width: 150px;
+            height: auto;
+            border: 2px solid transparent;
+            transition: transform 0.3s;
+        }
+        .image-container img:hover {
+            transform: scale(1.1);
+        }
+        #myCanvas {
+            width: 100%;
+            height: auto;
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>إضافة صورة واسم إلى الصورة باستخدام canvas</h1>
+        
+        <div class="image-container">
+            <h3>اختر صورة رئيسية:</h3>
+            <img src="image/كيان-1.jpg" alt="صورة 1" onclick="selectMainImage(this)">
+            <img src="images/placeholder2.jpg" alt="صورة 2" onclick="selectMainImage(this)">
+            <img src="images/placeholder3.jpg" alt="صورة 3" onclick="selectMainImage(this)">
+        </div>
+        
+        <div class="image-container" id="phrases-container">
+            <h3>اختر صورة إضافية:</h3>
+            <img src="image/1626271846.png" alt="عيدكم مبارك" onclick="selectPhrase(this)">
+            <img src="images/كل-عام-وأنتم-بخير.jpg" alt="كل عام وأنتم بخير" onclick="selectPhrase(this)">
+            <img src="images/تقبل-الله-طاعاتكم.jpg" alt="تقبل الله طاعاتكم" onclick="selectPhrase(this)">
+        </div>
+        
+        <div id="canvasContainer">
+            <canvas id="myCanvas" width="1000" height="1000"></canvas>
+        </div>
+
+        <div>
+            <h3>اكتب اسمك:</h3>
+            <input type="text" id="inputName" placeholder="أدخل اسمك هنا" oninput="addName()">
+        </div>
+        
+        <div>
+            <a id="canvasbtn" onclick="downloadImage()" class="btn btn-success btn-lg form-control form-control-sm btn-block mt-5 " style="color:white" >اضغط لتحميل البطاقة المربعة</a>
+        </div>
+    </div>
+    
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        var mainImage = new Image();
+        var extraImage = new Image();
+        var enteredName = '';
+
+        // ضبط حجم canvas لعرضها بشكل صحيح على جميع الشاشات
+        canvas.style.width = '500px';
+        canvas.style.height = '500px';
+        canvas.width = 1000;
+        canvas.height = 1000;
+
+        function selectMainImage(element) {
+            mainImage.src = element.src;
+            mainImage.onload = function() {
+                updateCanvas();
+            };
+        }
+
+        function selectPhrase(element) {
+            extraImage.src = element.src;
+            extraImage.onload = function() {
+                updateCanvas();
+            };
+        }
+
+        function addName() {
+            enteredName = document.getElementById('inputName').value;
+            updateCanvas();
+        }
+
+        function updateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // رسم الصورة الرئيسية
+            if (mainImage.src) {
+                ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
+            }
+            
+            // رسم الصورة الإضافية في الجانب السفلي الأيمن
+            if (extraImage.src) {
+                var sideMargin = 100; // هامش جانبي
+                var imageSize = 260; // حجم الصورة الإضافية
+                var x = canvas.width - imageSize - sideMargin - 80; // الموضع الأفقي
+                var y = canvas.height - imageSize - sideMargin - 160; // الموضع العمودي
+                ctx.drawImage(extraImage, x, y, imageSize, imageSize);
+            }
+            
+            // رسم النص (الاسم)
+            ctx.font = '60px "Amiri", serif';
+            ctx.fillStyle = '#98FB98'; // لون ذهبي يتناسب مع العيد والصور الفاتحة
+            ctx.textAlign = 'right';
+
+            if (enteredName) {
+                ctx.fillText(enteredName, canvas.width - 20, canvas.height - 60); // موضع الاسم أسفل الصور
+            }
+        }
+
+        function downloadImage() {
+            var link = document.createElement('a');
+            link.download = 'my-image.png';
+            link.href = canvas.toDataURL('image/png', 1.0); // تحديد الجودة القصوى
+            link.click();
+        }
+    </script>
+</body>
+</html>
